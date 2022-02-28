@@ -3,11 +3,9 @@ const express=require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const User = require('../Models/user');
-const utils=require('util');
 const CustomError=require('../helpers/CustomerError')
-
-const connection=require('../db');
-const query = utils.promisify(connection.query).bind(connection);
+const pool=require('../db');
+// const query = utils.promisify(connection.query).bind(connection);
 const validateRequest=require('../middlewares/ValidateRequest')
 
 
@@ -22,7 +20,7 @@ router.post('/register',validateRequest([
 
     const user=new User(req.body.name,req.body.email,req.body.password);
    await user.hashpassword();
-    const sql=await  query("INSERT INTO users SET ?;",user);
+    const sql=await  pool.query("INSERT INTO users SET ?;",user);
     res.json({
         user
     });
@@ -34,7 +32,7 @@ router.post('/register',validateRequest([
 })
 
 router.post('/login',async(req,res,next)=>{
-    const userBody= await query("SELECT * FROM users WHERE email=?",req.body.email);
+    const userBody= await pool.query("SELECT * FROM users WHERE email=?",req.body.email);
     if(!userBody){
       throw new CustomError("Wrong emailor password",401)
     }
@@ -46,7 +44,7 @@ router.post('/login',async(req,res,next)=>{
     }
     const token= await user.generateToken();
     const values=[ [token,user.id]]
-    const savedToken= await  query("INSERT INTO tokens (id,userId) VALUES ?",[values]);
+    const savedToken= await  pool.query("INSERT INTO tokens (id,userId) VALUES ?",[values]);
     const name=user.name;
     const email=user.email;
     res.json({
