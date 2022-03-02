@@ -52,17 +52,17 @@ const validateRequest=require('../middlewares/ValidateRequest');
  * @swagger
  * /user/register:
  *   post:
- *     summary: create new user
- *     tags: [users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/user'
- *     responses:
+ *    summary: create new user
+ *    tags: [users]
+ *    requestBody:
+ *     required: true
+ *     content:
+ *      application/json:
+ *      schemas:
+ *        $ref: '#/components/schemas/user'
+ *   responses:
  *       200:
- *         description: The user was successfully registerd
+ *         description: The post was successfully created
  *         content:
  *           application/json:
  *             schema:

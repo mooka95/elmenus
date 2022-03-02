@@ -69,7 +69,6 @@ const validateRequest=require('../middlewares/ValidateRequest');
  *               $ref: '#/components/schemas/user'
  *       500:
  *         description: Some server error
-
  */
 /**
  * @swagger
@@ -85,7 +84,7 @@ const validateRequest=require('../middlewares/ValidateRequest');
  *             $ref: '#/components/schemas/user'
  *     responses:
  *       200:
- *         description: The user was successfully registerd
+ *         description: The user was successfully logged In
  *         content:
  *           application/json:
  *             schema:
