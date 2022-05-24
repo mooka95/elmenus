@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const util = require('util');
 const Token=require('./token')
 const signJwt=  util.promisify(jwt.sign);
+const pool=require('../db');
 
 class User{
     id;
@@ -26,10 +27,12 @@ class User{
        return await bcrypt.compare(password,this.password)
 
      }
-     async generateToken(){
+     async generateToken(user){
          const tokenId=await signJwt({id:this.id},jwtSecret,{expiresIn: "1h"});
-         const token =new Token(tokenId)
-         return token.id;
+         const token =new Token(tokenId);
+         const values=[ [token.id,user.id]]
+         await pool.query("INSERT INTO tokens (id,userId) VALUES ?",[values]);
+          this.token= token.id;
 
      }
      setId(id){
